@@ -26,8 +26,8 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKey("a")) {
             Vector3 Rotation = new Vector3(0, -(float)TurnRate*Time.deltaTime, 0);
-            //Character.rotation += Rotation;
-            Character.AddTorque(Rotation);
+            Character.transform.Rotate(Rotation);
+            //Character.AddTorque(Rotation);
         }
         if (Input.GetKey("s")) {
             //Vector3 Velocity = new Vector3(-(float)(Math.Sin(DegreesToRadians(AngleFromZ)) * MoveForce * Time.deltaTime), 0, -(float)(Math.Cos(DegreesToRadians(AngleFromZ)) * MoveForce * Time.deltaTime));
@@ -37,8 +37,10 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKey("d")) {
             Vector3 Rotation = new Vector3(0, (float)TurnRate * Time.deltaTime, 0);
-            //Character.transform.Rotate(Rotation);
-            Character.AddTorque(Rotation);
+            Character.transform.Rotate(Rotation);
+            //Character.AddTorque(Rotation);
         }
+
+        Character.freezeRotation = true;
     }
 }
