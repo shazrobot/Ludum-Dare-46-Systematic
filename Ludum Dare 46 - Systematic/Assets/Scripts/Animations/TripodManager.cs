@@ -7,7 +7,7 @@ public class TripodManager : MonoBehaviour
 {
     private float SamplingDistance = 0.5f;
     private float LearningRate = 50f;
-    private float DistanceThreshold = 0.5f;
+    private float DistanceThreshold = 0.4f;
     private float MaxLegDistance = 6;
     public float[] Angles = { 0f, 0f, 0f, 0f};
     public List<TripodJoint> Leg1;
