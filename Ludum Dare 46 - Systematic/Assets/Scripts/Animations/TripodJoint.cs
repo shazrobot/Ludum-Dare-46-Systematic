@@ -8,6 +8,9 @@ public class TripodJoint : MonoBehaviour
     public Vector3 StartOffset;
     public float Magnitude;
 
+    public float MaxAngle;
+    public float MinAngle;
+
     public void SetMagintude(float angle)
     {
         Magnitude = angle;

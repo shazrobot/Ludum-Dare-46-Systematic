@@ -5,14 +5,21 @@ using UnityEngine;
 
 public class TripodManager : MonoBehaviour
 {
-    private float SamplingDistance = 1f;
-    private float LearningRate = 20f;
+    private float SamplingDistance = 0.5f;
+    private float LearningRate = 50f;
+    private float DistanceThreshold = 0.5f;
+    private float MaxLegDistance = 6;
     public float[] Angles = { 0f, 0f, 0f, 0f};
     public List<TripodJoint> Leg1;
     public List<TripodJoint> Leg2;
     public List<TripodJoint> Leg3;
     public GameObject Character;
-    public GameObject TargetBall;
+    public GameObject Leg3RealTarget;
+    public GameObject Leg3IdealTarget;
+    public GameObject Leg2RealTarget;
+    public GameObject Leg2IdealTarget;
+    public GameObject Leg1RealTarget;
+    public GameObject Leg1IdealTarget;
 
     public Vector3 ForwardKinematics(float[] angles, List<TripodJoint> Joints)
     {
@@ -59,6 +66,9 @@ public class TripodManager : MonoBehaviour
 
     public void InverseKinematics (Vector3 target, float[] angles, List<TripodJoint> Joints)
     {
+        if (DistanceFromTarget(target, angles, Joints) < DistanceThreshold)
+            return;
+
         for (int i = 0; i < Joints.Count; i++)
         {
             // Gradient descent
@@ -66,7 +76,13 @@ public class TripodManager : MonoBehaviour
             float gradient = PartialGradient(target, angles, i, Joints);
             //Debug.Log(gradient);
             angles[i] -= LearningRate * gradient;
+            // Clamp
+            angles[i] = Mathf.Clamp(angles[i], Joints[i].MinAngle, Joints[i].MaxAngle);
+
             Joints[i].SetMagintude(angles[i]);
+
+            if (DistanceFromTarget(target, angles, Joints) < DistanceThreshold)
+                return;
         }
     }
 
@@ -94,14 +110,29 @@ public class TripodManager : MonoBehaviour
         return Angles;
     }
 
-
+    void Start()
+    {
+        
+    }
 
     void FixedUpdate()
     {
-        InverseKinematics(TargetBall.transform.position, ReturnAngles(Leg3) , Leg3);
-        //SetAngles(Leg3, Angles);
-        //Debug.Log(ForwardKinematics(ReturnAngles(Leg3), Leg3));
+        if (Vector3.Distance(Leg3RealTarget.transform.position, Leg3IdealTarget.transform.position) > MaxLegDistance)
+        {
+            Leg3RealTarget.transform.position = Leg3IdealTarget.transform.position;
+        }
+        InverseKinematics(Leg3RealTarget.transform.position, ReturnAngles(Leg3) , Leg3);
 
+        if (Vector3.Distance(Leg2RealTarget.transform.position, Leg2IdealTarget.transform.position) > MaxLegDistance)
+        {
+            Leg2RealTarget.transform.position = Leg2IdealTarget.transform.position;
+        }
+        InverseKinematics(Leg2RealTarget.transform.position, ReturnAngles(Leg2), Leg2);
 
+        if (Vector3.Distance(Leg1RealTarget.transform.position, Leg1IdealTarget.transform.position) > MaxLegDistance)
+        {
+            Leg1RealTarget.transform.position = Leg1IdealTarget.transform.position;
+        }
+        InverseKinematics(Leg1RealTarget.transform.position, ReturnAngles(Leg1), Leg1);
     }
 }

@@ -20,27 +20,27 @@ public class PlayerMovement : MonoBehaviour
     {
         AngleFromX = Character.transform.rotation.eulerAngles.y;
         if (Input.GetKey("w")) {
-            //Vector3 Velocity = new Vector3((float)(Math.Sin(DegreesToRadians(AngleFromZ)) * MoveForce * Time.deltaTime), 0, (float)(Math.Cos(DegreesToRadians(AngleFromZ)) * MoveForce * Time.deltaTime));
             Character.AddForce(-transform.right*(float)MoveForce * Time.deltaTime);
-            //Character.velocity += Velocity;
         }
         if (Input.GetKey("a")) {
             Vector3 Rotation = new Vector3(0, -(float)TurnRate*Time.deltaTime, 0);
             Character.transform.Rotate(Rotation);
-            //Character.AddTorque(Rotation);
         }
         if (Input.GetKey("s")) {
-            //Vector3 Velocity = new Vector3(-(float)(Math.Sin(DegreesToRadians(AngleFromZ)) * MoveForce * Time.deltaTime), 0, -(float)(Math.Cos(DegreesToRadians(AngleFromZ)) * MoveForce * Time.deltaTime));
-            //Character.velocity += Velocity;
             Character.AddForce(transform.right*(float)MoveForce*Time.deltaTime);
 
         }
         if (Input.GetKey("d")) {
             Vector3 Rotation = new Vector3(0, (float)TurnRate * Time.deltaTime, 0);
             Character.transform.Rotate(Rotation);
-            //Character.AddTorque(Rotation);
+        }
+        if (Input.GetKey("q")) {
+            Character.AddForce(-transform.forward * (float)MoveForce * Time.deltaTime);
+        }
+        if (Input.GetKey("e")) {
+            Character.AddForce(transform.forward * (float)MoveForce * Time.deltaTime);
         }
 
-        Character.freezeRotation = true;
+            Character.freezeRotation = true;
     }
 }
