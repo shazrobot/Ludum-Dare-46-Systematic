@@ -31,7 +31,6 @@ public class TripodManager : MonoBehaviour
         {
             // Rotates around a new axis
             rotation *= Quaternion.AngleAxis(angles[i - 1], Joints[i - 1].Axis);
-            //Debug.Log(rotation* Joints[i].StartOffset);
             Vector3 nextPoint = prevPoint + (rotation * Joints[i].StartOffset);
 
             prevPoint = nextPoint;
@@ -74,7 +73,6 @@ public class TripodManager : MonoBehaviour
             // Gradient descent
             // Update : Solution -= LearningRate * Gradient
             float gradient = PartialGradient(target, angles, i, Joints);
-            //Debug.Log(gradient);
             angles[i] -= LearningRate * gradient;
             // Clamp
             angles[i] = Mathf.Clamp(angles[i], Joints[i].MinAngle, Joints[i].MaxAngle);
@@ -92,7 +90,6 @@ public class TripodManager : MonoBehaviour
         foreach (TripodJoint Joint in Joints)
         {
             Angles[i] = (Joint.Magnitude);
-            Debug.Log(Angles[i]);
             i++;
         }
         return Angles;
@@ -106,7 +103,6 @@ public class TripodManager : MonoBehaviour
             Joint.SetMagintude(Angles[i]);
             i++;
         }
-        //Debug.Log(Angles[0]);
         return Angles;
     }
 

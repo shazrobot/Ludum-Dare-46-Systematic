@@ -7,17 +7,18 @@ public class SpotlightMouseFocus : MonoBehaviour
 {
     public Light spotlight;
     public Camera Camera;
-    Ray ray;
-    RaycastHit hit;
+    public Ray ray;
+    public RaycastHit hit;
     public Color regularColour;
     public Color LockColour;
     public Material TargetingMaterial;
-    //public Color FireColor;
+    public bool Lock;
 
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        Lock = false;
         TargetingMaterial.DisableKeyword("_EMISSION");
         Color SpotColour = regularColour;
         Vector3 WorldPoint = Camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1000));
@@ -26,12 +27,13 @@ public class SpotlightMouseFocus : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             WorldPoint = hit.point;
-            Debug.Log(hit.collider.name);
+            //Debug.Log(hit.collider.name);
             if (hit.collider.name == "Person")
             {
                 WorldPoint = hit.transform.position;
                 SpotColour = LockColour;
                 TargetingMaterial.EnableKeyword("_EMISSION");
+                Lock = true;
             }
         }
 
