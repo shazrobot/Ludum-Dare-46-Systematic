@@ -25,6 +25,7 @@ public class SpotlightMouseFocus : MonoBehaviour
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit))
         {
+            WorldPoint = hit.point;
             Debug.Log(hit.collider.name);
             if (hit.collider.name == "Person")
             {

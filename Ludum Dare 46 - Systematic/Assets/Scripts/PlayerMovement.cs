@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody Character;
-    public double AngleFromZ;
+    public double AngleFromX;
     public double MoveForce;
     public double TurnRate;
 
@@ -18,10 +18,10 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        AngleFromZ = Character.transform.rotation.eulerAngles.y;
+        AngleFromX = Character.transform.rotation.eulerAngles.y;
         if (Input.GetKey("w")) {
             //Vector3 Velocity = new Vector3((float)(Math.Sin(DegreesToRadians(AngleFromZ)) * MoveForce * Time.deltaTime), 0, (float)(Math.Cos(DegreesToRadians(AngleFromZ)) * MoveForce * Time.deltaTime));
-            Character.AddForce(transform.forward*(float)MoveForce * Time.deltaTime);
+            Character.AddForce(-transform.right*(float)MoveForce * Time.deltaTime);
             //Character.velocity += Velocity;
         }
         if (Input.GetKey("a")) {
@@ -32,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey("s")) {
             //Vector3 Velocity = new Vector3(-(float)(Math.Sin(DegreesToRadians(AngleFromZ)) * MoveForce * Time.deltaTime), 0, -(float)(Math.Cos(DegreesToRadians(AngleFromZ)) * MoveForce * Time.deltaTime));
             //Character.velocity += Velocity;
-            Character.AddForce(-transform.forward*(float)MoveForce*Time.deltaTime);
+            Character.AddForce(transform.right*(float)MoveForce*Time.deltaTime);
 
         }
         if (Input.GetKey("d")) {
