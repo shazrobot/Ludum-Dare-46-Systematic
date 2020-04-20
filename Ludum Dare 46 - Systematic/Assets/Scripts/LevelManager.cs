@@ -46,6 +46,7 @@ public class LevelManager : MonoBehaviour
     {
         if (CurrentLevel == 3)
         {
+            FindObjectOfType<SoundManager>().Play("Monk");
             AdvanceButton.SetActive(false);
             Wall.SetActive(false);
         }

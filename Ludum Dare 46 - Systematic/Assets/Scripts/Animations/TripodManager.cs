@@ -106,27 +106,26 @@ public class TripodManager : MonoBehaviour
         return Angles;
     }
 
-    void Start()
-    {
-        
-    }
 
     void FixedUpdate()
     {
         if (Vector3.Distance(Leg3RealTarget.transform.position, Leg3IdealTarget.transform.position) > MaxLegDistance)
         {
+            FindObjectOfType<SoundManager>().Play("Tap");
             Leg3RealTarget.transform.position = Leg3IdealTarget.transform.position;
         }
         InverseKinematics(Leg3RealTarget.transform.position, ReturnAngles(Leg3) , Leg3);
 
         if (Vector3.Distance(Leg2RealTarget.transform.position, Leg2IdealTarget.transform.position) > MaxLegDistance)
         {
+            FindObjectOfType<SoundManager>().Play("Tap");
             Leg2RealTarget.transform.position = Leg2IdealTarget.transform.position;
         }
         InverseKinematics(Leg2RealTarget.transform.position, ReturnAngles(Leg2), Leg2);
 
         if (Vector3.Distance(Leg1RealTarget.transform.position, Leg1IdealTarget.transform.position) > MaxLegDistance)
         {
+            FindObjectOfType<SoundManager>().Play("Tap");
             Leg1RealTarget.transform.position = Leg1IdealTarget.transform.position;
         }
         InverseKinematics(Leg1RealTarget.transform.position, ReturnAngles(Leg1), Leg1);

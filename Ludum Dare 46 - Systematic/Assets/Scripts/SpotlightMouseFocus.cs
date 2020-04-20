@@ -34,11 +34,13 @@ public class SpotlightMouseFocus : MonoBehaviour
                 WorldPoint = hit.transform.position;
                 if (hit.collider.gameObject.GetComponent<PersonManager>().Compatible)
                 {
+                    FindObjectOfType<SoundManager>().Play("Positive");
                     SpotColour = CompatibleColour;
                     TargetingMaterial.EnableKeyword("_EMISSION");
                 }
                 else
                 {
+                    FindObjectOfType<SoundManager>().Play("Negative");
                     SpotColour = IncompatibleColour;
                 }
                 Lock = true;

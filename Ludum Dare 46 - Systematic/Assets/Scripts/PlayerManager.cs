@@ -89,6 +89,7 @@ public class PlayerManager : MonoBehaviour
         {
             if (spotlightMechanism.Lock)
             {
+                FindObjectOfType<SoundManager>().Play("Fire");
                 FireCapsule(spotlightMechanism.hit.transform.position);
             }
         }
@@ -114,6 +115,7 @@ public class PlayerManager : MonoBehaviour
         {
             if (CompatiblePeople.Count == CitizensRequired)
             {
+                FindObjectOfType<SoundManager>().Play("ButtonPress");
                 LevelFinished = true;
                 DropCitizens();
                 LevelManager.EndCheck();
@@ -123,6 +125,7 @@ public class PlayerManager : MonoBehaviour
 
         if ((collision.gameObject.name == "AdvanceButton") && LevelFinished)
         {
+            FindObjectOfType<SoundManager>().Play("LevelEnd");
             LevelFinished = false;
             LevelManager.AdvanceNight();
         }

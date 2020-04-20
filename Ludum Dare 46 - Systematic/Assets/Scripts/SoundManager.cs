@@ -15,12 +15,29 @@ public class SoundManager : MonoBehaviour
             s.source.clip =  s.clip;
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
+            s.source.loop = s.source.loop;
         }
+    }
+
+    void Start()
+    {
+        Play("Crickets");
     }
 
     public void Play (string name)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
-        s.source.Play();
+        if (s == null)
+        {
+            return;
+        }
+        if (s.source.isPlaying && !s.PlayOverItself)
+        {
+            return;
+        }
+        else
+        {
+            s.source.Play();
+        }
     }
 }
