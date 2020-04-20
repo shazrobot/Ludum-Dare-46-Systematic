@@ -66,8 +66,13 @@ public class PlayerManager : MonoBehaviour
         CompatiblePeople.Clear();
     }
 
-    void FixedUpdate()
+    void Update()
     {
+        if (Input.GetKey("escape"))
+        {
+            LevelManager.MenuOpen();
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             if (spotlightMechanism.Lock)
@@ -98,6 +103,7 @@ public class PlayerManager : MonoBehaviour
             {
                 DropCitizens();
                 LevelFinished = true;
+                LevelManager.EndCheck();
             }
             
         }
@@ -106,6 +112,11 @@ public class PlayerManager : MonoBehaviour
         {
             LevelFinished = false;
             LevelManager.AdvanceNight();
+        }
+
+        if ((collision.gameObject.name == "EndButton"))
+        {
+            LevelManager.CreditsPanelOn();
         }
     }
 }
