@@ -40,7 +40,18 @@ public class PlayerManager : MonoBehaviour
 
     public void UpdateObjective()
     {
-        NumRemainingIndicator.text = string.Format("{0}", (CitizensRequired - CompatiblePeople.Count));
+        if (LevelFinished)
+        {
+            NumRemainingIndicator.text = "Tell Him";
+        }
+        else if (CitizensRequired - CompatiblePeople.Count == 0)
+        {
+            NumRemainingIndicator.text = "Store Them";
+        }
+        else
+        {
+            NumRemainingIndicator.text = string.Format("{0}", (CitizensRequired - CompatiblePeople.Count));
+        }
     }
     private void FireCapsule(Vector3 Destination)
     {
@@ -64,6 +75,7 @@ public class PlayerManager : MonoBehaviour
             i++;
         }
         CompatiblePeople.Clear();
+        UpdateObjective();
     }
 
     void Update()
@@ -88,6 +100,7 @@ public class PlayerManager : MonoBehaviour
         {
             if (collision.gameObject.GetComponent<PersonManager>().Netted)
             {
+                FindObjectOfType<SoundManager>().Play("Collect");
                 collision.gameObject.GetComponent<PersonManager>().Collected();
                 if (collision.gameObject.GetComponent<PersonManager>().Compatible)
                 {
@@ -101,8 +114,8 @@ public class PlayerManager : MonoBehaviour
         {
             if (CompatiblePeople.Count == CitizensRequired)
             {
-                DropCitizens();
                 LevelFinished = true;
+                DropCitizens();
                 LevelManager.EndCheck();
             }
             
