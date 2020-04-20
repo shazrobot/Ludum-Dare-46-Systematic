@@ -10,7 +10,8 @@ public class SpotlightMouseFocus : MonoBehaviour
     public Ray ray;
     public RaycastHit hit;
     public Color regularColour;
-    public Color LockColour;
+    public Color IncompatibleColour;
+    public Color CompatibleColour;
     public Material TargetingMaterial;
     public bool Lock;
 
@@ -31,8 +32,15 @@ public class SpotlightMouseFocus : MonoBehaviour
             if (hit.collider.name == "Person")
             {
                 WorldPoint = hit.transform.position;
-                SpotColour = LockColour;
-                TargetingMaterial.EnableKeyword("_EMISSION");
+                if (hit.collider.gameObject.GetComponent<PersonManager>().Compatible)
+                {
+                    SpotColour = CompatibleColour;
+                    TargetingMaterial.EnableKeyword("_EMISSION");
+                }
+                else
+                {
+                    SpotColour = IncompatibleColour;
+                }
                 Lock = true;
             }
         }
