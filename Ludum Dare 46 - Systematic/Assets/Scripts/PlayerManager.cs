@@ -13,14 +13,28 @@ public class PlayerManager : MonoBehaviour
     public List<Rigidbody> Projectiles;
     public List<GameObject> CompatiblePeople;
     public List<GameObject> IncompatiblePeople;
+    private List<GameObject> Level1People;
+    private List<GameObject> Level2People;
+    private List<GameObject> Level3People;
+    private List<GameObject> Level4People;
 
     public int CitizensRequired;
     public Text NumRemainingIndicator;
     public Vector3 DropPoint;
     public int SpawnOffset;
 
+    public LevelManager LevelManager;
+    public Vector3 StartingPoint;
+    private bool LevelFinished;
+
+    public void ResetPosition()
+    {
+        this.transform.position = StartingPoint;
+    }
+
     void Start()
     {
+        LevelFinished = false;
         UpdateObjective();
     }
 
@@ -49,6 +63,7 @@ public class PlayerManager : MonoBehaviour
             Citizen.SetActive(true);
             i++;
         }
+        CompatiblePeople.Clear();
     }
 
     void FixedUpdate()
@@ -79,7 +94,18 @@ public class PlayerManager : MonoBehaviour
 
         if (collision.gameObject.name == "DumpButton")
         {
-            DropCitizens();
+            if (CompatiblePeople.Count == CitizensRequired)
+            {
+                DropCitizens();
+                LevelFinished = true;
+            }
+            
+        }
+
+        if ((collision.gameObject.name == "AdvanceButton") && LevelFinished)
+        {
+            LevelFinished = false;
+            LevelManager.AdvanceNight();
         }
     }
 }
