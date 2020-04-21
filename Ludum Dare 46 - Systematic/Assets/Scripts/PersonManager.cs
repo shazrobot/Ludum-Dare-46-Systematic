@@ -19,6 +19,7 @@ public class PersonManager : MonoBehaviour
 
     public void Hit()
     {
+        FindObjectOfType<SoundManager>().Play("Scream");
         Net.SetActive(true);
         Netted = true;
         if(Compatible)
