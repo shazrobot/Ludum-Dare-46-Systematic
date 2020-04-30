@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,12 +8,14 @@ public class TripodManager : MonoBehaviour
 {
     private float SamplingDistance = 0.5f;
     private float LearningRate = 50f;
-    private float DistanceThreshold = 0.4f;
-    private float MaxLegDistance = 6;
+    public float DistanceThreshold = 0.4f;
+    public float MaxLegDistance = 8;
+    public float BodyWobble;
     public float[] Angles = { 0f, 0f, 0f, 0f};
     public List<TripodJoint> Leg1;
     public List<TripodJoint> Leg2;
     public List<TripodJoint> Leg3;
+
     public GameObject Character;
     public GameObject Leg3RealTarget;
     public GameObject Leg3IdealTarget;
@@ -20,6 +23,16 @@ public class TripodManager : MonoBehaviour
     public GameObject Leg2IdealTarget;
     public GameObject Leg1RealTarget;
     public GameObject Leg1IdealTarget;
+
+    public GameObject Leg1RaycastOrigin;
+    public GameObject Leg2RaycastOrigin;
+    public GameObject Leg3RaycastOrigin;
+
+    public GameObject Leg1RayVector;
+    public GameObject Leg2RayVector;
+    public GameObject Leg3RayVector;
+
+    public GameObject Body;
 
     public Vector3 ForwardKinematics(float[] angles, List<TripodJoint> Joints)
     {
@@ -106,28 +119,61 @@ public class TripodManager : MonoBehaviour
         return Angles;
     }
 
+    public void ResetLegTarget(Vector3 origin, Vector3 direction, GameObject IdealTarget)
+    {
+        
+        Vector3 RotatedDirection = direction - origin;
+        RaycastHit hit;
+        Debug.Log(RotatedDirection);
+        Ray ray = new Ray(origin, RotatedDirection);
+        if (Physics.Raycast(ray, out hit))
+        {
+
+            
+            //Debug.Log(hit.point);
+            IdealTarget.transform.position = hit.point;
+        }
+    }
+
+    public void AngleBody()
+    {
+        Vector3 Leg1height = Body.transform.position - Leg1[3].transform.position;
+        Vector3 Leg2height = Body.transform.position - Leg2[3].transform.position;
+        Vector3 Leg3height = Body.transform.position - Leg3[3].transform.position;
+        
+        Body.transform.localEulerAngles = (new Vector3(Leg2height.y - Leg3height.y, 0, Leg1height.y))*BodyWobble;
+    }
 
     void FixedUpdate()
     {
+        
+
         if (Vector3.Distance(Leg3RealTarget.transform.position, Leg3IdealTarget.transform.position) > MaxLegDistance)
         {
-            FindObjectOfType<SoundManager>().Play("Tap");
+            //FindObjectOfType<SoundManager>().Play("Tap");
+            ResetLegTarget(Leg3RaycastOrigin.transform.position, Leg3RayVector.transform.position, Leg3IdealTarget);
             Leg3RealTarget.transform.position = Leg3IdealTarget.transform.position;
         }
         InverseKinematics(Leg3RealTarget.transform.position, ReturnAngles(Leg3) , Leg3);
 
         if (Vector3.Distance(Leg2RealTarget.transform.position, Leg2IdealTarget.transform.position) > MaxLegDistance)
         {
-            FindObjectOfType<SoundManager>().Play("Tap");
+            //FindObjectOfType<SoundManager>().Play("Tap");
+            //
+            ResetLegTarget(Leg2RaycastOrigin.transform.position, Leg2RayVector.transform.position, Leg2IdealTarget);
             Leg2RealTarget.transform.position = Leg2IdealTarget.transform.position;
         }
         InverseKinematics(Leg2RealTarget.transform.position, ReturnAngles(Leg2), Leg2);
 
         if (Vector3.Distance(Leg1RealTarget.transform.position, Leg1IdealTarget.transform.position) > MaxLegDistance)
         {
-            FindObjectOfType<SoundManager>().Play("Tap");
+            //FindObjectOfType<SoundManager>().Play("Tap");
+            //Leg1RealTarget.transform.position = Leg1IdealTarget.transform.position;
+            ResetLegTarget(Leg1RaycastOrigin.transform.position, Leg1RayVector.transform.position, Leg1IdealTarget);
             Leg1RealTarget.transform.position = Leg1IdealTarget.transform.position;
         }
         InverseKinematics(Leg1RealTarget.transform.position, ReturnAngles(Leg1), Leg1);
+
+        AngleBody();
     }
 }

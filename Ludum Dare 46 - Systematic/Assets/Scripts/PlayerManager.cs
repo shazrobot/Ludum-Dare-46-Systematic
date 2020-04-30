@@ -13,10 +13,6 @@ public class PlayerManager : MonoBehaviour
     public List<Rigidbody> Projectiles;
     public List<GameObject> CompatiblePeople;
     public List<GameObject> IncompatiblePeople;
-    private List<GameObject> Level1People;
-    private List<GameObject> Level2People;
-    private List<GameObject> Level3People;
-    private List<GameObject> Level4People;
 
     public int CitizensRequired;
     public Text NumRemainingIndicator;
@@ -26,6 +22,8 @@ public class PlayerManager : MonoBehaviour
     public LevelManager LevelManager;
     public Vector3 StartingPoint;
     private bool LevelFinished;
+
+    public PlayerMovement PlayersMotion;
 
     public void ResetPosition()
     {
@@ -97,6 +95,8 @@ public class PlayerManager : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        PlayersMotion.JumpReset();
+
         if (collision.gameObject.name == "Person")
         {
             if (collision.gameObject.GetComponent<PersonManager>().Netted)

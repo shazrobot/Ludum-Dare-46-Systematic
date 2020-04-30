@@ -2,16 +2,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody Character;
     public double AngleFromX;
     public double MoveForce;
-    
+    public double JumpModifier;
     public double TurnRate;
+    public float SprintModifier;
     private double TrueMoveForce;
-
+    private bool Jumped = false;
+    
+    public void JumpReset()
+    {
+        Jumped = false;
+    }
     public double DegreesToRadians(double degrees)
     {
         return (Math.PI / 180) * degrees;
@@ -22,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if(Input.GetKey("left shift"))
         {
-            TrueMoveForce = MoveForce * 2;
+            TrueMoveForce = MoveForce * SprintModifier;
         }
         else
         {
@@ -49,6 +56,10 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKey("e")) {
             Character.AddForce(transform.forward * (float)TrueMoveForce * Time.deltaTime);
+        }
+        if (Input.GetKey("space") & !Jumped){
+            Character.AddForce(transform.up * (float)(JumpModifier));
+            Jumped = true;
         }
 
             Character.freezeRotation = true;
